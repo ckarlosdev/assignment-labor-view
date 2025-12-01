@@ -17,8 +17,8 @@ function Employees({ name, title }: Props) {
             ? {
                 textAlign: "center",
                 fontWeight: "bold",
-                color: "blue",
-                borderBottom: "1px solid blue",
+                // color: "gray",
+                borderBottom: "2px solid blue",
               }
             : { textAlign: "center", fontWeight: "normal", color: "black" }
         }

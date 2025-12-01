@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
     if (assignmentId) {
       const urlAssignment = searchAssignURL(Number(assignmentId));
-      console.log(urlAssignment);
+      // console.log(urlAssignment);
       searchAssignment(urlAssignment);
     } else {
       console.log("AssigmentsId not found in the URL.");
@@ -73,12 +73,15 @@ function App() {
             );
             const jobName = jobData ? jobData.name : "Nombre Desconocido";
             const jobNumber = jobData ? jobData.number : "0";
+            const jobAddress = jobData ? jobData.address : "0";
             return (
               <ListGroup.Item
                 key={job.jobsId}
                 as="li"
                 className="d-flex align-items-center"
                 style={{ borderBottom: "3px solid gray" }}
+                action
+                variant="dark"
               >
                 <div
                   className="ms-2 me-auto text-center"
@@ -90,6 +93,9 @@ function App() {
                     <Badge bg="primary" pill className="ms-3">
                       {job.assignmentEmployeeDtos.length}
                     </Badge>
+                  </div>
+                  <div>
+                    {jobAddress}
                   </div>
                   <Container fluid className="p-0 mt-2">
                     <div className="d-flex flex-wrap justify-content-center">

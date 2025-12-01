@@ -31,7 +31,7 @@ function Dates({ assignmentDetail }: Props) {
           type="date"
           style={{ textAlign: "center", fontWeight: "bold" }}
           readOnly
-          value={assignmentDetail?.startDate}
+          value={assignmentDetail?.startDate ?? ""}
         />
       </FloatingLabel>
       <FloatingLabel
@@ -48,7 +48,7 @@ function Dates({ assignmentDetail }: Props) {
           type="date"
           style={{ textAlign: "center", fontWeight: "bold" }}
           readOnly
-          value={assignmentDetail?.endDate}
+          value={assignmentDetail?.endDate ?? ""}
         />
       </FloatingLabel>
     </div>
