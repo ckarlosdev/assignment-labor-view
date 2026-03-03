@@ -28,5 +28,7 @@ export type Assignment = {
 
 export type jobApi = {
   jobsId: number;
+  startTime: string;
+  assignmentComment: string;
   assignmentEmployeeDtos: Employee[];
 }

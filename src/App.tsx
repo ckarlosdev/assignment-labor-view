@@ -59,21 +59,85 @@ function App() {
     }
   }, [assignmentData]);
 
-  // console.log(assignmentDetail);
+  const formatToAMPM = (time24: string) => {
+    if (!time24) return "07:00 AM";
+
+    const [hours, minutes] = time24.split(":");
+    let h = parseInt(hours, 10);
+    const ampm = h >= 12 ? "PM" : "AM";
+
+    h = h % 12;
+    h = h ? h : 12;
+    const formattedHours = h.toString().padStart(2, "0");
+
+    return `${formattedHours}:${minutes} ${ampm}`;
+  };
+
+  const dataContainerStyle: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+    fontSize: "0.85rem",
+    marginTop: "8px",
+    flexWrap: "wrap",
+    width: "100%",
+    textAlign: "center",
+  };
+
+
+  const hourStyle = {
+    fontStyle: "italic",
+    fontWeight: "bold",
+    color: "#0984e3", // Un azul suave para resaltar la hora
+    backgroundColor: "#e1f5fe",
+    padding: "2px 6px",
+    borderRadius: "4px",
+  };
+
+  const commentStyle = {
+    fontStyle: "italic",
+    // color: "#b2bec3",
+    maxWidth: "250px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis", // Si el comentario es muy largo, pone "..."
+  };
+
+  const separatorStyle = {
+    color: "#dfe6e9",
+    fontWeight: "bold",
+  };
+
+  const addressLinkStyle: React.CSSProperties = {
+    fontWeight: 600,
+    color: "#0984e3", // Un azul que indique que es cliqueable
+    textDecoration: "none", // Quitar subrayado feo
+    cursor: "pointer",
+    borderBottom: "1px dashed #74b9ff", // Una línea punteada sutil abajo
+    transition: "all 0.2s ease",
+  };
 
   return (
     <div className="text-center mx-auto" style={{ maxWidth: "80%" }}>
       <Title />
       <Dates assignmentDetail={assignmentDetail} />
       <div>
-        <ListGroup as="ol">
+        <ListGroup >
           {assignmentDetail?.assignmentJobDtos.map((job) => {
             const jobData = jobsDetail.find(
-              (jobD) => jobD.jobsId === job.jobsId
+              (jobD) => jobD.jobsId === job.jobsId,
             );
             const jobName = jobData ? jobData.name : "Nombre Desconocido";
             const jobNumber = jobData ? jobData.number : "0";
-            const jobAddress = jobData ? jobData.address : "0";
+            const googleMapsUrl = jobData
+              ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(jobData.address)}`
+              : "";
+            const jobAddress = jobData ? jobData.address : "";
+            const jobHour = formatToAMPM(job.startTime);
+            const jobComments = job.assignmentComment
+              ? job.assignmentComment
+              : "";
             return (
               <ListGroup.Item
                 key={job.jobsId}
@@ -94,14 +158,35 @@ function App() {
                       {job.assignmentEmployeeDtos.length}
                     </Badge>
                   </div>
-                  <div>
-                    {jobAddress}
+                  <div style={dataContainerStyle}>
+                    <a
+                      href={googleMapsUrl}
+                      target="_blank" // Abrir en pestaña nueva
+                      rel="noreferrer" // Seguridad
+                      style={addressLinkStyle}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = "#74b9ff")
+                      } // Efecto hover
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = "#0984e3")
+                      }
+                    >
+                      📍 {jobAddress}
+                    </a>
+                    <span style={separatorStyle}>•</span>
+                    <span style={hourStyle}>🕒{jobHour}</span>
+                    {jobComments && (
+                      <>
+                        <span style={separatorStyle}>•</span>
+                        <span style={commentStyle}>"{jobComments}"</span>
+                      </>
+                    )}
                   </div>
                   <Container fluid className="p-0 mt-2">
                     <div className="d-flex flex-wrap justify-content-center">
                       {job.assignmentEmployeeDtos.map((employeeId) => {
                         const employee = employeesDetail.find(
-                          (emp) => emp.employeesId === employeeId.employeesId
+                          (emp) => emp.employeesId === employeeId.employeesId,
                         );
 
                         const name =
